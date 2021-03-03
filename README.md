@@ -1,6 +1,13 @@
-# dashatar_clone
+# Dashatar Clone.
 
-A new Flutter project.
+A clone version of [Flutter's Dash Avatar Generator app](https://dashatar-dev.web.app/#/).
+
+![Screenshot 2021-03-03 at 2 59 40 PM](https://user-images.githubusercontent.com/31005114/109767058-f4f6f880-7c31-11eb-8566-df90d2f5ca6b.png)
+
+
+- [x] It is not mobile responsive.
+- [x] It is buggy.
+- [x] I did my best.
 
 ## Getting Started
 
