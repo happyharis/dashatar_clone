@@ -1,5 +1,6 @@
 import 'package:dashatar_clone/console_bar.dart';
 import 'package:dashatar_clone/dashatar_notifier.dart';
+import 'package:dashatar_clone/models.dart';
 import 'package:dashatar_clone/pulsing_text.dart';
 import 'package:dashatar_clone/role_buttons.dart';
 import 'package:flutter/material.dart';
@@ -94,18 +95,14 @@ class DashatarConsole extends StatelessWidget {
 class ConsoleBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        return SizedBox(
-          child: Row(
-            children: [
-              LeftSection(),
-              SizedBox(width: 10),
-              RightSection(),
-            ],
-          ),
-        );
-      },
+    return SizedBox(
+      child: Row(
+        children: [
+          LeftSection(),
+          SizedBox(width: 10),
+          RightSection(),
+        ],
+      ),
     );
   }
 }
@@ -181,11 +178,7 @@ class AttributeSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final dashNotifier = Provider.of<DashatarNotifier>(context);
-    final points = dashNotifier.currentPoints;
-    final attributes = dashNotifier.attributes;
-    final selectedColor =
-        dashNotifier.accentColor ?? Theme.of(context).textTheme.subtitle1.color;
+    final attributes = Provider.of<DashatarNotifier>(context).attributes;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -195,61 +188,79 @@ class AttributeSection extends StatelessWidget {
           Row(
             children: [
               Expanded(child: Text(attribute.text), flex: 1),
-              Flexible(
-                flex: 1,
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(30),
-                    border: Border.all(),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      IconButton(
-                          icon: Icon(
-                            Icons.remove,
-                            // If user has not increased the points or
-                            // the points is at 1
-                            color: points == 8 || attribute.points == 1
-                                ? Colors.grey
-                                : selectedColor,
-                          ),
-                          onPressed: () {
-                            context
-                                .read<DashatarNotifier>()
-                                .lowerAttribute(attribute);
-                          }),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          attribute.points.toString(),
-                          style: TextStyle(color: selectedColor),
-                        ),
-                      ),
-                      IconButton(
-                          icon: Icon(
-                            Icons.add,
-                            // If user has no more points to increase
-                            // the points is at 5 (which is max for a single)
-                            // attribute
-                            color: points == 0 || attribute.points == 5
-                                ? Colors.grey
-                                : selectedColor,
-                          ),
-                          onPressed: () {
-                            context
-                                .read<DashatarNotifier>()
-                                .increaseAttribute(attribute);
-                          }),
-                    ],
-                  ),
-                ),
-              )
+              AttributeButton(attribute: attribute)
             ],
           ),
           SizedBox(height: 15),
         ]
       ],
+    );
+  }
+}
+
+class AttributeButton extends StatelessWidget {
+  const AttributeButton({
+    Key key,
+    @required this.attribute,
+  }) : super(key: key);
+
+  final Attribute attribute;
+
+  @override
+  Widget build(BuildContext context) {
+    final dashNotifier = Provider.of<DashatarNotifier>(context);
+    final points = dashNotifier.currentPoints;
+    final selectedColor =
+        dashNotifier.accentColor ?? Theme.of(context).textTheme.subtitle1.color;
+    return Flexible(
+      flex: 1,
+      child: Container(
+        padding: EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(30),
+          border: Border.all(),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            IconButton(
+                icon: Icon(
+                  Icons.remove,
+                  size: 30,
+                  // Initial points is 8.
+                  // If user has not increased the points or
+                  // the points is at 1
+                  color: points == 8 || attribute.points == 1
+                      ? Colors.grey
+                      : selectedColor,
+                ),
+                onPressed: () {
+                  context.read<DashatarNotifier>().lowerAttribute(attribute);
+                }),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                attribute.points.toString(),
+                style: TextStyle(color: selectedColor, fontSize: 20),
+              ),
+            ),
+            IconButton(
+                icon: Icon(
+                  Icons.add,
+                  size: 30,
+                  // If user has no more points to increase
+                  // the points is at 5 (which is max for a single)
+                  // attribute
+                  color: points == 0 || attribute.points == 5
+                      ? Colors.grey
+                      : selectedColor,
+                ),
+                onPressed: () {
+                  context.read<DashatarNotifier>().increaseAttribute(attribute);
+                }),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -263,11 +274,12 @@ class PointsRemaining extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme.headline5;
     return RichText(
       text: TextSpan(
-          text: points,
-          style: textTheme.copyWith(color: color),
-          children: [
-            TextSpan(text: ' Points Remaining', style: textTheme),
-          ]),
+        text: points,
+        style: textTheme.copyWith(color: color),
+        children: [
+          TextSpan(text: ' Points Remaining', style: textTheme),
+        ],
+      ),
     );
   }
 }

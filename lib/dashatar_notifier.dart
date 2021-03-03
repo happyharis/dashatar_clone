@@ -14,13 +14,13 @@ class DashatarNotifier extends ChangeNotifier {
 
   Color get color => accentColor;
 
-  void updateRole(Role role) {
-    _initRoles.forEach((element) {
-      if (element.text == role.text) {
-        element.isSelected = true;
-        accentColor = element.color;
+  void updateRole(Role chosenRole) {
+    _initRoles.forEach((_role) {
+      if (_role.text == chosenRole.text) {
+        _role.isSelected = true;
+        accentColor = _role.color;
       } else {
-        element.isSelected = false;
+        _role.isSelected = false;
       }
     });
     _isResetable = true;
@@ -36,11 +36,15 @@ class DashatarNotifier extends ChangeNotifier {
   ];
   int currentPoints = 8;
 
-  void lowerAttribute(Attribute attribute) {
-    if (currentPoints == 8 || attribute.points == 1) return;
-    attributes.forEach((element) {
-      if (element.text == attribute.text) {
-        element.points--;
+  void lowerAttribute(Attribute chosenAttribute) {
+    // If current points is 8, that means the points have not been used.
+    // Therefore, there is no need of lowering it.
+    // The lowest attribute point must be 1.
+    if (currentPoints == 8 || chosenAttribute.points == 1) return;
+    attributes.forEach((_attribute) {
+      // If attribute is chosen
+      if (_attribute.text == chosenAttribute.text) {
+        _attribute.points--;
       }
     });
     currentPoints++;
@@ -48,11 +52,15 @@ class DashatarNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  void increaseAttribute(Attribute attribute) {
-    if (currentPoints == 0 || attribute.points == 5) return;
-    attributes.forEach((element) {
-      if (element.text == attribute.text) {
-        element.points++;
+  void increaseAttribute(Attribute chosenAttribute) {
+    // If current points is 0, that means all the points is used up.
+    // Therefore, there is no need to increase it.
+    // An attribute can have a maximum of 5 points
+    if (currentPoints == 0 || chosenAttribute.points == 5) return;
+    attributes.forEach((_attribute) {
+      // If attribute is chosen
+      if (_attribute.text == chosenAttribute.text) {
+        _attribute.points++;
       }
     });
     currentPoints--;
@@ -65,10 +73,11 @@ class DashatarNotifier extends ChangeNotifier {
   bool get isResetable => _isResetable;
 
   void reset() {
-    _initRoles.forEach((element) => element.isSelected = false);
-    attributes.forEach((element) => element.points = 1);
+    _initRoles.forEach((_attribute) => _attribute.isSelected = false);
+    attributes.forEach((_attribute) => _attribute.points = 1);
     accentColor = null;
     _isResetable = false;
+    currentPoints = 8;
     notifyListeners();
   }
 }

@@ -26,11 +26,13 @@ class _PulsingTextState extends State<PulsingText>
           textAnimationController.forward();
         }
       });
-    textAnimation = Tween(begin: 30.0, end: 27.0).animate(CurvedAnimation(
-      parent: textAnimationController,
-      curve: Curves.easeInBack,
-      reverseCurve: Curves.easeOut,
-    ));
+    textAnimation = Tween(begin: 30.0, end: 27.0).animate(
+      CurvedAnimation(
+        parent: textAnimationController,
+        curve: Curves.easeInBack,
+        reverseCurve: Curves.easeOut,
+      ),
+    );
   }
 
   @override
