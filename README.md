@@ -1,4 +1,6 @@
-# Dashatar Clone.
+# [Dashatar Clone](https://dashatar-clone.web.app/#/)
+
+Click [here](https://dashatar-clone.web.app/#/) to visit the (buggy) project.
 
 A clone version of [Flutter's Dash Avatar Generator app](https://dashatar-dev.web.app/#/).
 
